@@ -2,33 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>2-Person Messenger (Firebase)</title>
+<title>2-Person Realtime Chat</title>
 <style>
   body { font-family: Arial; max-width:600px; margin:30px auto; }
-  #chat { border:1px solid #ccc; height:350px; overflow:auto; padding:10px; display:flex; flex-direction:column; gap:6px; }
+  #chat { border:1px solid #ccc; height:400px; overflow:auto; padding:10px; display:flex; flex-direction:column; gap:6px; }
   .left { align-self:flex-start; background:#e0e0e0; padding:8px 12px; border-radius:12px; max-width:70%; }
   .right { align-self:flex-end; background:#60a5fa; color:white; padding:8px 12px; border-radius:12px; max-width:70%; }
-  input { width:75%; padding:8px; margin-bottom:6px; }
+  input { width:70%; padding:8px; margin-bottom:6px; }
   button { padding:8px; margin-bottom:6px; }
-  #status { font-weight:bold; margin-bottom:10px; }
+  .hide { display:none; }
 </style>
 </head>
 <body>
 
-<h2>2-Person Messenger (Firebase)</h2>
+<h2>2-Person Realtime Chat</h2>
 
-<div id="setup">
-  <input id="username" placeholder="Enter your name">
-  <button id="setName">Set Name</button><br>
+<div id="chat"></div>
 
-  <input id="chatWith" placeholder="Enter person you want to chat with">
-  <button id="setChatWith">Start Chat</button>
-</div>
-
-<div id="status"></div>
-<div id="chat" class="hide"></div>
-
-<div id="composer" class="hide">
+<div id="composer">
   <input id="msg" placeholder="Type a message..." />
   <button id="send">Send</button>
 </div>
@@ -38,90 +29,46 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-  // 🔹 Firebase Config (replace with yours)
-var firebaseConfig = {
-  apiKey: "AIzaSyAf1rx_kVNQ7kfnhm5yn3mlsf3jHFP7xF0",
-  authDomain: "chatsystem-001.firebaseapp.com",
-  databaseURL: "https://chatsystem-001-default-rtdb.firebaseio.com",
-  projectId: "chatsystem-001",
-  storageBucket: "chatsystem-001.firebasestorage.app",
-  messagingSenderId: "20781486614",
-  appId: "1:20781486614:web:6db9555f47ea2223c45b37"
-};
-firebase.initializeApp(firebaseConfig);
-var db = firebase.database();
+  // Firebase config
+  var firebaseConfig = {
+    apiKey: "AIzaSyAf1rx_kVNQ7kfnhm5yn3mlsf3jHFP7xF0",
+    authDomain: "chatsystem-001.firebaseapp.com",
+    databaseURL: "https://chatsystem-001-default-rtdb.firebaseio.com",
+    projectId: "chatsystem-001",
+    storageBucket: "chatsystem-001.firebasestorage.app",
+    messagingSenderId: "20781486614",
+    appId: "1:20781486614:web:6db9555f47ea2223c45b37"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.database();
 
-var username = "";
-var chatWith = "";
-var chatBox = document.getElementById('chat');
-var msgInput = document.getElementById('msg');
-var status = document.getElementById('status');
+  // Assign user automatically
+  let user = Math.random() < 0.5 ? "Person1" : "Person2";
 
-// Keep track of users (set in database)
-var usersRef = db.ref("users");
+  const chatBox = document.getElementById('chat');
+  const msgInput = document.getElementById('msg');
 
-// Set name
-document.getElementById('setName').onclick = function(){
-  if(username !== "") return;
-  var name = document.getElementById('username').value.trim();
-  if(name === "") return;
-  username = name;
-  document.getElementById('setName').disabled = true;
-  document.getElementById('username').disabled = true;
-  status.textContent = "You are chatting as: " + username;
-  // Add user to Firebase if not exists
-  usersRef.child(username).set({ joined: true });
-}
+  // Send message
+  document.getElementById('send').onclick = function() {
+    const text = msgInput.value.trim();
+    if(text === "") return;
+    db.ref("messages").push({
+      sender: user,
+      text: text,
+      timestamp: Date.now()
+    });
+    msgInput.value = "";
+  }
 
-// Set chat partner
-document.getElementById('setChatWith').onclick = function(){
-  if(username === "") return;
-  var person = document.getElementById('chatWith').value.trim();
-  if(person === "" || person === username) return;
-
-  // Check if user exists in Firebase
-  usersRef.child(person).once('value', function(snapshot){
-    if(snapshot.exists()){
-      chatWith = person;
-      document.getElementById('chatWith').disabled = true;
-      document.getElementById('setChatWith').disabled = true;
-      status.textContent = "You are chatting with: " + chatWith;
-      document.getElementById('chat').classList.remove('hide');
-      document.getElementById('composer').classList.remove('hide');
-      listenMessages();
-    } else {
-      alert(person + " has not joined yet!");
-    }
+  // Listen for messages
+  db.ref("messages").on("child_added", function(snapshot) {
+    const data = snapshot.val();
+    const div = document.createElement('div');
+    div.textContent = data.sender + ": " + data.text;
+    div.className = (data.sender === user) ? 'right' : 'left';
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
   });
-}
-
-// Send message
-document.getElementById('send').onclick = function(){
-  if(chatWith === "") return;
-  var msg = msgInput.value.trim();
-  if(msg === "") return;
-  db.ref("messages").push({
-    sender: username,
-    receiver: chatWith,
-    text: msg
-  });
-  msgInput.value = "";
-}
-
-// Listen for messages
-function listenMessages(){
-  db.ref("messages").on("child_added", function(snapshot){
-    var data = snapshot.val();
-    if( (data.sender === username && data.receiver === chatWith) ||
-        (data.sender === chatWith && data.receiver === username) ){
-      var p = document.createElement('div');
-      p.textContent = data.sender + ": " + data.text;
-      p.className = (data.sender === username) ? 'right' : 'left';
-      chatBox.appendChild(p);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-  });
-}
 </script>
 
 </body>
