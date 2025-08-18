@@ -10,16 +10,21 @@
   .right { align-self:flex-end; background:#60a5fa; color:white; padding:8px 12px; border-radius:12px; max-width:70%; }
   input { width:70%; padding:8px; margin-bottom:6px; }
   button { padding:8px; margin-bottom:6px; }
-  .hide { display:none; }
+  #setup { margin-bottom:10px; }
 </style>
 </head>
 <body>
 
 <h2>2-Person Realtime Chat</h2>
 
+<div id="setup">
+  <input id="username" placeholder="Enter your name">
+  <button id="setName">Set Name</button>
+</div>
+
 <div id="chat"></div>
 
-<div id="composer">
+<div id="composer" class="hide">
   <input id="msg" placeholder="Type a message..." />
   <button id="send">Send</button>
 </div>
@@ -29,7 +34,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-  // Firebase config
+  // 🔹 Firebase Config
   var firebaseConfig = {
     apiKey: "AIzaSyAf1rx_kVNQ7kfnhm5yn3mlsf3jHFP7xF0",
     authDomain: "chatsystem-001.firebaseapp.com",
@@ -42,18 +47,36 @@
   firebase.initializeApp(firebaseConfig);
   var db = firebase.database();
 
-  // Assign user automatically
-  let user = Math.random() < 0.5 ? "Person1" : "Person2";
-
   const chatBox = document.getElementById('chat');
   const msgInput = document.getElementById('msg');
 
+  // Load name from localStorage if exists
+  let username = localStorage.getItem('chat_name') || "";
+
+  if(username !== "") {
+    document.getElementById('username').value = username;
+    document.getElementById('username').disabled = true;
+    document.getElementById('setName').disabled = true;
+    document.getElementById('composer').classList.remove('hide');
+  }
+
+  // Set name permanently
+  document.getElementById('setName').onclick = function() {
+    let name = document.getElementById('username').value.trim();
+    if(name === "") return;
+    username = name;
+    localStorage.setItem('chat_name', username); // store permanently
+    document.getElementById('username').disabled = true;
+    document.getElementById('setName').disabled = true;
+    document.getElementById('composer').classList.remove('hide');
+  }
+
   // Send message
   document.getElementById('send').onclick = function() {
-    const text = msgInput.value.trim();
-    if(text === "") return;
+    let text = msgInput.value.trim();
+    if(text === "" || username === "") return;
     db.ref("messages").push({
-      sender: user,
+      sender: username,
       text: text,
       timestamp: Date.now()
     });
@@ -65,7 +88,8 @@
     const data = snapshot.val();
     const div = document.createElement('div');
     div.textContent = data.sender + ": " + data.text;
-    div.className = (data.sender === user) ? 'right' : 'left';
+    // Align right if sender is you, left if other person
+    div.className = (data.sender === username) ? 'right' : 'left';
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
   });
