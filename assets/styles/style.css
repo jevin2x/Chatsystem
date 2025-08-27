@@ -1,0 +1,276 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+}
+
+#sidebar {
+  width: 250px;
+  background: rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+#sidebar .profile {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#userPic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #38f9d7;
+  cursor: pointer;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+#userName {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+#newUser {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+#newUser::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+#addBtn ,#logoutBtn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #667eea;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#addBtn:hover {
+  background: #764ba2;
+}
+#logoutBtn:hover {
+  background: #764ba2;
+}
+
+#friendRequests {
+  width: 100%;
+  margin-top: 20px;
+}
+aside{
+    background: linear-gradient(-105deg, #667eea, #764ba2);
+   padding: 20px;
+   width: 250px;
+}
+
+#friendRequests h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+
+#friendRequests ul {
+  list-style: none;
+  padding: 0;
+}
+
+#friendRequests ul li {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#friendRequests ul li:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+#friendRequests ul li img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #38f9d7;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+#friendRequests ul li span {
+  flex: 1;
+  font-size: 16px;
+  color: #fff;
+}
+
+#friendsList {
+  width: 250px;
+  background: rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px;
+}
+
+#friendsList h4 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  text-align: center;
+}
+
+#friendsUl {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+#friendsUl li {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#friendsUl li:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+#friendsUl li img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #38f9d7;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+#friendsUl li span {
+  flex: 1;
+  font-size: 18px;
+  color: #fff;
+}
+
+#mainChat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 28px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+#chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+#chat div {
+  max-width: 70%;
+  padding: 6px 12px;
+  margin: 4px 0;
+  border-radius: 10px;
+  word-wrap: break-word;
+}
+
+#chat .left {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.2);
+}
+
+#chat .right {
+  align-self: flex-end;
+  background: rgba(56,249,215,0.3);
+}
+
+#composer {
+  display: flex;
+  width: 100%;
+}
+
+#composer input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  margin-right: 10px;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+#composer input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+#composer button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #667eea;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#composer button:hover {
+  background: #764ba2;
+}
+
+@media (max-width: 790px) {
+  body{
+    display: flex;
+    flex-direction: column;
+  }
+  #sidebar{
+    width: 100%;
+  }
+  #friendsSidebar{
+    width: 100%;
+  }
+}
+ 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ChatSystem</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="./assets/styles/style.css">
+</head>
+<body>
+
+<!-- Left Sidebar -->
+
+<div id="sidebar">
+  <div class="profile">
+    <img id="userPic" src="./assets/images/default.jpg" alt="User">
+    <h3 id="userName">Username</h3>
+  </div>
+
+  <!-- Add someone -->
+  <input type="text" id="newUser" placeholder="Add someone...">
+  <button id="addBtn">Add</button>
+
+  <!-- Friend Requests -->
+  <div id="friendRequests">
+    <h4>Friend Requests</h4>
+    <ul id="requestsUl"></ul>
+  </div>
+</div>
+
+
+<!-- Main Chat Area -->
+<div id="mainChat">
+  <h2>You Might Be Friends!</h2>
+  <div id="chat"></div>
+  <div id="composer">
+    <input id="msg" placeholder="Type a message...">
+    <button id="send">Send</button>
+  </div>
+</div>
+
+<!-- Right Sidebar - Friends -->
+<aside id="friendsSidebar">
+  <h4>Your Friends</h4>
+  <ul id="friendsUl"></ul>
+  <button id="logoutBtn" >Logout</button>
+</aside>
+
+<input type="file" id="uploadPic" accept="image/*" style="display:none">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<!-- Chat JS -->
+<script src="./assets/js/chat.js"></script>
+
+</body>
+</html>
